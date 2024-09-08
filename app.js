@@ -1,13 +1,42 @@
-const http = require("http");
+const { readFile, writeFile } = require("fs").promises;
+// const util = require("util");
 
-const server = http.createServer((request, response) => {
-  if (request.url === "/") {
-    response.end(`<h1>Welcome to my homepage</h1>`);
-  } else if (request.url === "/about") {
-    response.end(`<p>Checkout our history</p>`);
-  } else {
-    response.end(`<p>Page not found <a href="/">Back to homepage </a></p>`);
+// const readFilePromise = util.promisify(readFile);
+// const writeFilePromise = util.promisify(writeFile);
+
+// const getText = (path) => {
+//   return new Promise((resolve, reject) => {
+//     readFile(path, "utf8", (err, result) => {
+//       if (err) {
+//         reject(err);
+//       } else {
+//         resolve(result);
+//       }
+//     });
+//   });
+// };
+
+// getText("./content/first.txt")
+//   .then((result) => {
+//     console.log(result);
+//   })
+//   .catch((err) => {
+//     console.log(err);
+//   });
+
+const start = async () => {
+  try {
+    const first = await readFile("./content/first.txt", "utf8");
+    const second = await readFile("./content/second.txt", "utf8");
+    await writeFile(
+      "./content/result-async.txt",
+      `THIS IS AWESOME: ${first}, ${second}`,
+      { flag: "a" }
+    );
+    console.log(first, second);
+  } catch (error) {
+    console.log(error);
   }
-});
+};
 
-server.listen(5000);
+start();
